@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -30,8 +31,20 @@ class ProductoControllerTest {
     @Test
     void testObtenerTodos() throws Exception {
         // Given
-        Producto p1 = new Producto(1L, "Producto 1", "Desc 1", 100.0, 10, "SKU1");
-        Producto p2 = new Producto(2L, "Producto 2", "Desc 2", 200.0, 20, "SKU2");
+        Producto p1 = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+        Producto p2 = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
 
         when(productoService.obtenerTodos()).thenReturn(Arrays.asList(p1, p2));
 
@@ -46,7 +59,13 @@ class ProductoControllerTest {
     @Test
     void testObtenerPorId_Existente() throws Exception {
         // Given
-        Producto producto = new Producto(1L, "Test", "Desc", 100.0, 10, "SKU");
+        Producto producto = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
         when(productoService.buscarPorId(1L)).thenReturn(Optional.of(producto));
 
         // When & Then
@@ -69,7 +88,13 @@ class ProductoControllerTest {
     @Test
     void testCrearProducto() throws Exception {
         // Given
-        Producto producto = new Producto(1L, "Nuevo", "Desc", 150.0, 5, "SKU-NEW");
+        Producto producto = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
         when(productoService.guardarProducto(any(Producto.class))).thenReturn(producto);
 
         // When & Then
@@ -81,7 +106,8 @@ class ProductoControllerTest {
                         "descripcion": "Desc",
                         "precio": 150.0,
                         "stock": 5,
-                        "sku": "SKU-NEW"
+                        "sku": "SKU-NEW",
+                        "activo" true
                     }
                     """))
                 .andExpect(status().isCreated())

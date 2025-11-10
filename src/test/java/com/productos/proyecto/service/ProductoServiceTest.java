@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,8 @@ class ProductoServiceTest {
                 .nombre("Test Product")
                 .precio(100.0)
                 .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
                 .build();
 
         when(productoRepository.save(any(Producto.class))).thenReturn(producto);
@@ -48,10 +51,22 @@ class ProductoServiceTest {
     @Test
     void testObtenerTodos() {
         // Given
-        Producto p1 = new Producto(1L, "Producto 1", "Desc 1", 100.0, 10, "SKU1");
-        Producto p2 = new Producto(2L, "Producto 2", "Desc 2", 200.0, 20, "SKU2");
+        Producto producto = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
+        Producto producto2 = Producto.builder()
+                .nombre("Test Product2")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
 
-        when(productoRepository.findAll()).thenReturn(Arrays.asList(p1, p2));
+        when(productoRepository.findAll()).thenReturn(Arrays.asList(producto, producto2));
 
         // When
         List<Producto> resultados = productoService.obtenerTodos();
@@ -64,7 +79,13 @@ class ProductoServiceTest {
     @Test
     void testBuscarPorId_Existente() {
         // Given
-        Producto producto = new Producto(1L, "Test", "Desc", 100.0, 10, "SKU");
+        Producto producto = Producto.builder()
+                .nombre("Test Product")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .build();
         when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
 
         // When

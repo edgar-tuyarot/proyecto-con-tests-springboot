@@ -64,7 +64,7 @@ public class ProductoService {
         return productoRepository.existsById(id);
     }
 
-    // ✅ Contar total de productos
+    //Contar total de productos
     public long contarProductos() {
         return productoRepository.count();
     }
@@ -73,4 +73,12 @@ public class ProductoService {
     public void activarDesactivar(long id, boolean estado){
         productoRepository.actualizarEstado(id, estado);
     }
+
+    // Obtener productos por categoría (ID)
+    public List<Producto> obtenerPorCategoria(Long categoriaId) {
+        return productoRepository.findByCategoriaId(categoriaId);
+    }
+
+
+
 }

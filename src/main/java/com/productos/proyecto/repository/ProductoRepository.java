@@ -1,5 +1,6 @@
 package com.productos.proyecto.repository;
 
+import com.productos.proyecto.model.Categoria;
 import com.productos.proyecto.model.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,6 +38,8 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Buscar por SKU
     Optional<Producto> findBySku(String sku);
 
+
+
     // Buscar productos por rango de precios
     List<Producto> findByPrecioBetween(Double precioMin, Double precioMax);
 
@@ -44,6 +47,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Modifying
     @Query("UPDATE Producto p SET p.activo = :activo WHERE p.id = :id")
     void actualizarEstado(@Param("id") Long id, @Param("activo") Boolean activo);
+
+    //Buscar productos por categoría (ID)
+    List<Producto> findByCategoriaId(Long categoriaId);
+
 
 
 

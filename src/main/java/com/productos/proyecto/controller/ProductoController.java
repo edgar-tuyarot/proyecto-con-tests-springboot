@@ -17,14 +17,14 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    // ✅ GET - Obtener todos los productos
+    //Obtener todos los productos
     @GetMapping
     public ResponseEntity<List<Producto>> obtenerTodos() {
         List<Producto> productos = productoService.obtenerTodos();
         return ResponseEntity.ok(productos);
     }
 
-    // ✅ GET - Obtener producto por ID
+    //Obtener producto por ID
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtenerPorId(@PathVariable Long id) {
         Optional<Producto> producto = productoService.buscarPorId(id);
@@ -33,7 +33,18 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ✅ POST - Crear nuevo producto
+    //Ver productos por categoria
+    @GetMapping("/categoria/{id}")
+    public ResponseEntity<List<Producto>> productoPorCategorias(@PathVariable Long id){
+        try{
+          List<Producto> productosList =   productoService.obtenerPorCategoria(id);
+          return ResponseEntity.ok(productosList);
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // Crear nuevo producto
     @PostMapping
     public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
         try {
@@ -44,7 +55,7 @@ public class ProductoController {
         }
     }
 
-    // ✅ PUT - Actualizar producto existente
+    //Actualizar producto existente
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizarProducto(
             @PathVariable Long id,
@@ -59,7 +70,7 @@ public class ProductoController {
         return ResponseEntity.ok(producto);
     }
 
-    // ✅ DELETE - Eliminar producto
+    //Eliminar producto
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
         if (!productoService.existeProducto(id)) {

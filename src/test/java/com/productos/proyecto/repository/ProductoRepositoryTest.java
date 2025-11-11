@@ -1,5 +1,6 @@
 package com.productos.proyecto.repository;
 
+import com.productos.proyecto.model.Categoria;
 import com.productos.proyecto.model.Producto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ class ProductoRepositoryTest {
     private ProductoRepository productoRepository;
     @Autowired
     private TestEntityManager entityManager;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     // Test para guardar un producto
     @Test
@@ -148,9 +151,33 @@ class ProductoRepositoryTest {
         assertTrue(productoActualizado.isPresent());
         assertFalse(productoActualizado.get().getActivo()); // ← Debería ser false ahora
 
+    }
 
+    @Test
+    void testfindByCategoriaId(){
+        //Given
+        Categoria categoria = Categoria.builder()
+                .nombre("Test")
+                .descripcion("Categoria de prueba")
+                .build();
+        Categoria categoriaGuardada =  categoriaRepository.save(categoria);
 
+        Producto producto = Producto.builder()
+                .nombre("Producto Test")
+                .precio(100.0)
+                .stock(10)
+                .activo(true)  // ← Empieza como activo
+                .fechaCreacion(LocalDateTime.now())
+                .categoria(categoriaGuardada)
+                .build();
+        Producto productoGuardado = productoRepository.save(producto);
 
+        //When
+        List<Producto> listaProductos = productoRepository.findByCategoriaId(categoriaGuardada.getId());
+
+        //Then
+        assertFalse(listaProductos.isEmpty());
+        assertEquals("Producto Test", listaProductos.get(0).getNombre());
     }
 
 }

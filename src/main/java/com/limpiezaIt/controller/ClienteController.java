@@ -47,8 +47,17 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
-
-        clienteService.actualizar(id,cliente);
-
+            Cliente clienteActualizado = clienteService.actualizar(id,cliente);
+        if(clienteActualizado == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(clienteActualizado);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> desactivarCliente(@PathVariable Long id){
+        boolean resultado = clienteService.desactivarCliente(id);
+        if (resultado) return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
+    }
+
+
 }

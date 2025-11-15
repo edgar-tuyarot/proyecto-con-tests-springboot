@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "productos")
@@ -33,5 +34,9 @@ public class Producto {
         @ManyToOne
         @JoinColumn(name = "categoria_id")
         private Categoria categoria;
+
+        // Definimos la relacion uno a muchos con ProductoPedido
+        @OneToMany(mappedBy = "producto")
+        private List<ProductoPedido> pedidos;
 
 }

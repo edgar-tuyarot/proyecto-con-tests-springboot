@@ -15,11 +15,22 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private long id;
+
     @Column
     private double total;
+
+    @Column
+    private boolean activo = true;
+
+    //Definimos que la relacion sera un pedido tiene un estado
+    @ManyToOne
+    @JoinColumn(name = "estado_pedido_id")
+    private EstadoPedido estadoPedido;
+
     //Definimos que la relacion sera un pedido pertenece a un cliente
     @ManyToOne
     @JoinColumn(name = "cliente_id")

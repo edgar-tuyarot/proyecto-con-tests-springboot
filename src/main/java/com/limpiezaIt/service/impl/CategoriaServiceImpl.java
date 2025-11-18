@@ -2,6 +2,7 @@ package com.limpiezaIt.service.impl;
 
 import com.limpiezaIt.entity.Categoria;
 import com.limpiezaIt.repository.CategoriaRepository;
+import com.limpiezaIt.service.interfaces.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CategoriaServiceImpl {
+public class CategoriaServiceImpl implements CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
 
@@ -25,12 +26,12 @@ public class CategoriaServiceImpl {
 
     //Obtener todas las categorías
     public List<Categoria> obtenerTodas() {
-        return categoriaRepository.findAll();
+        return categoriaRepository.findByActivoTrue();
     }
 
     //Buscar categoría por ID
     public Optional<Categoria> buscarPorId(Long id) {
-        return categoriaRepository.findById(id);
+        return categoriaRepository.findByActivoTrueAndId(id);
     }
 
 

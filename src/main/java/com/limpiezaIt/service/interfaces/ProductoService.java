@@ -1,8 +1,11 @@
 package com.limpiezaIt.service.interfaces;
 import com.limpiezaIt.entity.Producto;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public interface ProductoService {
     //Ver todos
     List<Producto> obtenerTodos();

@@ -1,10 +1,12 @@
 package com.limpiezaIt.service.interfaces;
 
 import com.limpiezaIt.entity.Cliente;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public interface ClienteService {
 
     //Ver todos

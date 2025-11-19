@@ -21,7 +21,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     //Query para buscar por id, activo true
     Optional<Pedido> findByActivoTrueAndId(Long id);
 
-    //Metodo para desactivar producto
+    // Metodo para desactivar categoria no se usa ya que se utiliza un set para cambiar de activo a false
     @Transactional
     @Modifying
     @Query("UPDATE Pedidos p SET p.activo = false WHERE p.id = :id")

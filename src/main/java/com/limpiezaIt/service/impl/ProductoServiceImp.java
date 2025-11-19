@@ -63,7 +63,9 @@ public class ProductoServiceImp implements ProductoService {
     public boolean desactivarProducto(Long id) {
         Optional<Producto> optionalProducto = buscarPorId(id);
         if(optionalProducto.isPresent()){
-            productoRepository.desactivarProducto(id);
+            Producto producto = optionalProducto.get();
+            producto.setActivo(false);
+            productoRepository.save(producto);
             return true;
         }else{
             return false;

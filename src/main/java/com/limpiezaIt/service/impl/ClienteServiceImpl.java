@@ -65,7 +65,9 @@ public class ClienteServiceImpl implements ClienteService {
     public boolean desactivarCliente(Long id) {
         Optional<Cliente> opt = buscarPorId(id);
         if (opt.isPresent()){
-            clienteRepository.desactivarCliente(id);
+            Cliente cliente = opt.get();
+            cliente.setActivo(false);
+            clienteRepository.save(cliente);
             return true;
         }
         return false;

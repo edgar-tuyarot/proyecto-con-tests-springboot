@@ -31,7 +31,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Optional<Producto> findByActivoTrueAndId(Long id);
 
 
-    // Metodo para desactivar producto
+    // Metodo para desactivar categoria no se usa ya que se utiliza un set para cambiar de activo a false
     @Transactional
     @Modifying
     @Query("UPDATE Producto p SET p.activo = false WHERE p.id = :id")

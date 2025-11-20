@@ -4,10 +4,13 @@ package com.limpiezaIt.service.impl;
 import com.limpiezaIt.entity.EstadoPedido;
 import com.limpiezaIt.repository.EstadoPedidoRepository;
 import com.limpiezaIt.service.interfaces.EstadoPedidoService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@Service
 public class EstadoPedidoImpl implements EstadoPedidoService {
 
     private final EstadoPedidoRepository estadoPedidoRepository;

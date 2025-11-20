@@ -3,11 +3,12 @@ package com.limpiezaIt.service.impl;
 import com.limpiezaIt.entity.Pedido;
 import com.limpiezaIt.repository.PedidoRepository;
 import com.limpiezaIt.service.interfaces.PedidoService;
+import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class PedidoServiceImpl implements PedidoService {
 
     private final PedidoRepository pedidoRepository;

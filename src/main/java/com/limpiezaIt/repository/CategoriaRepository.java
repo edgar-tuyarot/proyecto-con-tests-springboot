@@ -21,11 +21,7 @@ public interface CategoriaRepository  extends JpaRepository<Categoria, Long> {
     Optional<Categoria> findByActivoTrueAndId(Long id);
 
 
-    //Metodo para desactivar categoria no se usa ya que se utiliza un set para cambiar de activo a false
-    @Transactional
-    @Modifying
-    @Query("UPDATE Categoria c SET c.activo = false WHERE c.id = :id")
-    void desactivarCategoria(@Param("id") Long id);
+
 
 
 

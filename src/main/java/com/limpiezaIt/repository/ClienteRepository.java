@@ -21,9 +21,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     Optional<Cliente> findByActivoTrueAndId(Long id);
 
-    // Metodo para desactivar categoria no se usa ya que se utiliza un set para cambiar de activo a false
-    @Transactional
-    @Modifying
-    @Query("UPDATE Cliente c SET c.activo = false WHERE c.id = :id")
-    void desactivarCliente(@Param("id") Long id);
+
 }

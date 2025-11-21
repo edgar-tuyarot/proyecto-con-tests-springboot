@@ -26,22 +26,23 @@ public class EstadoPedidoImpl implements EstadoPedidoService {
     }
 
     @Override
-    public EstadoPedido actualizarEstadoPedido(Long id, EstadoPedido estadoPedido) {
-        EstadoPedido estadoPedidoDB = verEstadoPedidoPorId(id);
-        if(estadoPedidoDB != null){
-            estadoPedidoDB.setNombre(estadoPedido.getNombre());
-            return estadoPedidoRepository.save(estadoPedidoDB);
+    public Optional<EstadoPedido> actualizarEstadoPedido(Long id, EstadoPedido estadoPedido) {
+        Optional<EstadoPedido> estadoPedidoDB = verEstadoPedidoPorId(id);
+        if(estadoPedidoDB.isPresent()){
+            estadoPedidoDB.get().setNombre(estadoPedido.getNombre());
+            estadoPedidoRepository.save(estadoPedidoDB.get());
+            return estadoPedidoDB;
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public EstadoPedido verEstadoPedidoPorId(Long id) {
+    public Optional<EstadoPedido> verEstadoPedidoPorId(Long id) {
         Optional<EstadoPedido> estadoPedidoOpt = estadoPedidoRepository.findById(id);
         if(estadoPedidoOpt.isPresent()){
-            return estadoPedidoOpt.get();
+            return estadoPedidoOpt;
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

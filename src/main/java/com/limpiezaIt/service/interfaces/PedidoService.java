@@ -17,8 +17,11 @@ public interface PedidoService {
     //Crear pedido
     Pedido crearPedido(Pedido pedido);
 
+    //Agregar estado
+    Optional<Pedido> actualizarEstado(Long id, Long idEstado);
+
     //Actualizar pedido
-    Pedido actualizarPedido(Long id, Pedido pedido);
+    Optional<Pedido> actualizarPedido(Long id, Pedido pedido);
 
     //Eliminar pedido
     boolean eliminarPedido(Long id);

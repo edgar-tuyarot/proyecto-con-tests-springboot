@@ -1,9 +1,13 @@
 package com.limpiezaIt.controller;
 
+
+import com.limpiezaIt.entity.EstadoPedido;
 import com.limpiezaIt.entity.Pedido;
+import com.limpiezaIt.service.interfaces.EstadoPedidoService;
 import com.limpiezaIt.service.interfaces.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +17,16 @@ import java.util.Optional;
 @RequestMapping("/api/pedidos")
 public class PedidoController {
 
+
+    private  final PedidoService pedidoService;
+    private final EstadoPedidoService estadoPedidoService;
+
     @Autowired
-    PedidoService pedidoService;
+    public PedidoController( PedidoService pedidoService,  EstadoPedidoService estadoPedidoService){
+        this.pedidoService = pedidoService;
+        this.estadoPedidoService = estadoPedidoService;
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Pedido>> obtenerTodos(){
@@ -35,9 +47,15 @@ public class PedidoController {
     public ResponseEntity<Pedido> actualizarPedido(
             @PathVariable Long id,
             @RequestBody Pedido pedidoActualizado) {
-        Pedido pedido = pedidoService.actualizarPedido(id, pedidoActualizado);
-        if (pedido == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(pedido);
+        Optional<Pedido> pedido = pedidoService.actualizarPedido(id, pedidoActualizado);
+        return pedido.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+    }
+
+    //Modificar el estado de un pedido, recibimmos 2 ids
+    @PutMapping("/{id}/estado/{idEstado}")
+    public ResponseEntity<Pedido> agregarEstado(@PathVariable Long id, @PathVariable Long idEstado) {
+        Optional<Pedido> pedido = pedidoService.actualizarEstado(id, idEstado);
+        return pedido.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping

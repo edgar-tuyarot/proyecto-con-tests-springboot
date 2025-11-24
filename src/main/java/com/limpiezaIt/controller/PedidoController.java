@@ -1,17 +1,16 @@
 package com.limpiezaIt.controller;
 
-
-import com.limpiezaIt.entity.EstadoPedido;
 import com.limpiezaIt.entity.Pedido;
+import com.limpiezaIt.error.ResourceNotFoundException;
 import com.limpiezaIt.service.interfaces.EstadoPedidoService;
 import com.limpiezaIt.service.interfaces.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/pedidos")
@@ -36,26 +35,21 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> obtenerPorId(@PathVariable Long id){
-        Optional<Pedido> pedido = pedidoService.buscarPorId(id);
-
-        return pedido.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+   Pedido obtenerPorId(@PathVariable Long id) throws ResourceNotFoundException {
+        return pedidoService.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> actualizarPedido(
+    Pedido actualizarPedido(
             @PathVariable Long id,
-            @RequestBody Pedido pedidoActualizado) {
-        Optional<Pedido> pedido = pedidoService.actualizarPedido(id, pedidoActualizado);
-        return pedido.map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
+            @RequestBody Pedido pedidoActualizado) throws ResourceNotFoundException {
+        return pedidoService.actualizarPedido(id, pedidoActualizado);
     }
 
     //Modificar el estado de un pedido, recibimmos 2 ids
     @PutMapping("/{id}/estado/{idEstado}")
-    public ResponseEntity<Pedido> agregarEstado(@PathVariable Long id, @PathVariable Long idEstado) {
-        Optional<Pedido> pedido = pedidoService.actualizarEstado(id, idEstado);
-        return pedido.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    Pedido agregarEstado(@PathVariable Long id, @PathVariable Long idEstado) throws ResourceNotFoundException {
+        return pedidoService.actualizarEstado(id, idEstado);
     }
 
     @PostMapping
@@ -69,7 +63,7 @@ public class PedidoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarPedido(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarPedido(@PathVariable Long id) throws ResourceNotFoundException {
         boolean resultado = pedidoService.eliminarPedido(id);
         if (resultado) return ResponseEntity.noContent().build();
         return ResponseEntity.notFound().build();

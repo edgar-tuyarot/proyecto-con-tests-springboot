@@ -2,9 +2,11 @@ package com.limpiezaIt.service.impl;
 
 import com.limpiezaIt.entity.EstadoPedido;
 import com.limpiezaIt.entity.Pedido;
+import com.limpiezaIt.error.ResourceNotFoundException;
 import com.limpiezaIt.repository.EstadoPedidoRepository;
 import com.limpiezaIt.repository.PedidoRepository;
 import com.limpiezaIt.service.interfaces.PedidoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,27 +25,25 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
-    //Agregar estado de pedido desde EstadoPedido
+    //Actualizar Estado de pedido
     @Override
-    public Optional<Pedido> actualizarEstado(Long id, Long idEstado) {
-
-        //Buscamos si el id del estado existe
-        Optional<EstadoPedido> estadoPedidoOpt = estadoPedidoRepository.findById(idEstado);
-        //si no existe, retornamos un optiona vacio.
-        if (!estadoPedidoOpt.isPresent()) return Optional.empty();
+    public Pedido actualizarEstado(Long id, Long idEstado){
 
         //Buscamos el pedido por id
-        Optional<Pedido> pedidoActualizado = pedidoRepository.findByActivoTrueAndId(id);
-        //Si no existe, retornamos un optiona vacio.
-        if (!pedidoActualizado.isPresent()) return Optional.empty();
+        Pedido pedido = pedidoRepository.findByActivoTrueAndId(id)
+                .orElseThrow(()-> new ResourceNotFoundException("El pedido con el id "+ id+" no existe"));
+
+        //Buscamos si el id del estado existe
+        EstadoPedido ePedido =  estadoPedidoRepository.findById(idEstado)
+                .orElseThrow(()->new ResourceNotFoundException("El estado id "+idEstado+" no existe"));
+
+
 
         //Si llegamos a este punto, debemos gestionar el cambio de estado
-        Pedido pedido = pedidoActualizado.get();
-        pedido.setEstadoPedido(estadoPedidoOpt.get());
-        pedidoRepository.save(pedido);
+        pedido.setEstadoPedido(ePedido);
 
         //Retornamos el pedido actualizado
-        return pedidoActualizado;
+        return pedidoRepository.save(pedido);
 
 
     }
@@ -55,8 +55,12 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Optional<Pedido> buscarPorId(Long id) {
-        return pedidoRepository.findByActivoTrueAndId(id);
+    public Pedido buscarPorId(Long id) throws ResourceNotFoundException {
+                Optional<Pedido> optionalPedido =  pedidoRepository.findByActivoTrueAndId(id);
+                if (!optionalPedido.isPresent()){
+                    throw new ResourceNotFoundException("El Pedido con el id "+id+" no existe");
+                }
+                return optionalPedido.get();
     }
 
     @Override
@@ -66,28 +70,28 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     @Override
-    public Optional<Pedido> actualizarPedido(Long id, Pedido pedido) {
-        Optional<Pedido> pedidoDB = buscarPorId(id);
-        if (!pedidoDB.isPresent()) return Optional.empty();
-        Pedido pedidoActualizado = pedidoDB.get();
-        pedidoActualizado.setCliente(pedido.getCliente());
-        pedidoActualizado.setProductos(pedido.getProductos());
-        pedidoActualizado.setTotal(pedido.getTotal());
-        pedidoRepository.save(pedidoActualizado);
-        return Optional.of(pedidoActualizado);
+    public Pedido actualizarPedido(Long id, Pedido pedido) throws ResourceNotFoundException {
+
+        Pedido pedidoDB = pedidoRepository.findByActivoTrueAndId(id)
+                .orElseThrow(()-> new ResourceNotFoundException("El pedido con el id "+ id+" no existe"));
+
+        pedidoDB.setCliente(pedido.getCliente());
+        pedidoDB.setProductos(pedido.getProductos());
+        pedidoDB.setTotal(pedido.getTotal());
+        pedidoRepository.save(pedidoDB);
+        return pedidoDB;
     }
 
     @Override
-    public boolean eliminarPedido(Long id) {
-        Optional<Pedido> pedidoOpt = buscarPorId(id);
-        if(pedidoOpt.isPresent()){
-            Pedido pedido = pedidoOpt.get();
-            pedido.setActivo(false);
-            pedidoRepository.save(pedido);
+    public boolean eliminarPedido(Long id) throws ResourceNotFoundException {
+        Pedido pedidoOpt = pedidoRepository.findByActivoTrueAndId(id)
+                .orElseThrow(()-> new ResourceNotFoundException("El pedido con el id "+ id+" no existe"));
+         pedidoOpt.setActivo(false);
+            pedidoRepository.save(pedidoOpt);
             return true;
         }
-        return false;
-    }
+
+
 }
 
 

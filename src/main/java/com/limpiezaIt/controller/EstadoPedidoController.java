@@ -47,15 +47,15 @@ public class EstadoPedidoController {
     }
 
     //Modificar un estado pedido
-    @PutMapping("/{id}")
-    public ResponseEntity<EstadoPedido> actualizarEstadoPedido(@PathVariable Long id, @RequestBody EstadoPedido estadoPedido) {
-        EstadoPedido estadoPedidoActualizado = estadoPedidoService.actualizarEstadoPedido(id, estadoPedido);
-        if (estadoPedidoActualizado != null) {
-            return ResponseEntity.ok(estadoPedidoActualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<EstadoPedido> actualizarEstadoPedido(@PathVariable Long id, @RequestBody EstadoPedido estadoPedido) {
+//        EstadoPedido estadoPedidoActualizado = estadoPedidoService.actualizarEstadoPedido(id, estadoPedido);
+//        if (estadoPedidoActualizado != null) {
+//            return ResponseEntity.ok(estadoPedidoActualizado);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 
 

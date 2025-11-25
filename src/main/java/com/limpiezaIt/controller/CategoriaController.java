@@ -28,24 +28,15 @@ public class CategoriaController {
 
     //Buscar por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> obtenerPorId (@PathVariable long id){
-        Optional<Categoria> categoria = categoriaServiceImpl.buscarPorId(id);
-
-        return categoria.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    Categoria obtenerPorId (@PathVariable long id){
+        return categoriaServiceImpl.buscarPorId(id);
 
     }
 
     //Crear nueva categoría
     @PostMapping
-    public ResponseEntity<Categoria> guardarCategoria(@RequestBody Categoria categoria){
-        try{
-            Categoria nuevaCategoria = categoriaServiceImpl.guardarCategoria(categoria);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCategoria);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
-
+    Categoria guardarCategoria(@RequestBody Categoria categoria){
+               return  categoriaServiceImpl.guardarCategoria(categoria);
     }
 
     //Actualizar categoría

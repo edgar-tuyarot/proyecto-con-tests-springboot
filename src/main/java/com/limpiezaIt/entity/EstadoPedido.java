@@ -23,6 +23,7 @@ public class EstadoPedido {
     private long id;
 
     @Column(nullable = false, length = 50)
+
     private String nombre;
 
     @OneToMany(mappedBy = "estadoPedido")

@@ -2,6 +2,7 @@ package com.limpiezaIt.controller;
 
 import com.limpiezaIt.entity.Cliente;
 import com.limpiezaIt.service.interfaces.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +34,13 @@ public class ClienteController {
 
     //Crear cliente
     @PostMapping
-    public ResponseEntity<Cliente> crearCliente(@RequestBody Cliente cliente){
-        try {
-            Cliente nuevoCliente =  clienteService.crearCliente(cliente);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoCliente);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
-
+    Cliente crearCliente(@RequestBody @Valid Cliente cliente){
+            return clienteService.crearCliente(cliente);
     }
 
     //Actualizar cliente
     @PutMapping("/{id}")
-    Cliente actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
+    Cliente actualizarCliente(@PathVariable Long id, @RequestBody @Valid Cliente cliente){
             return clienteService.actualizar(id,cliente);
     }
 

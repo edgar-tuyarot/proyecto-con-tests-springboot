@@ -2,6 +2,7 @@ package com.limpiezaIt.controller;
 
 import com.limpiezaIt.entity.Producto;
 import com.limpiezaIt.service.interfaces.ProductoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,20 +34,15 @@ public class ProductoController {
 
     //Crear nuevo producto
     @PostMapping
-    public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
-        try {
-            Producto nuevoProducto = productoService.guardarProducto(producto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevoProducto);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    Producto crearProducto(@RequestBody @Valid Producto producto) {
+        return productoService.guardarProducto(producto);
     }
 
     //Actualizar producto existente
     @PutMapping("/{id}")
     Producto actualizarProducto(
             @PathVariable Long id,
-            @RequestBody Producto productoActualizado) {
+            @RequestBody @Valid Producto productoActualizado) {
         return productoService.actualizar(id,productoActualizado);
     }
 

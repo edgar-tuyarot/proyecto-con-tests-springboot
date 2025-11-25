@@ -4,7 +4,7 @@ import com.limpiezaIt.entity.Pedido;
 import com.limpiezaIt.error.ResourceNotFoundException;
 import com.limpiezaIt.service.interfaces.EstadoPedidoService;
 import com.limpiezaIt.service.interfaces.PedidoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pedidos")
+@RequiredArgsConstructor
 public class PedidoController {
 
 
     private  final PedidoService pedidoService;
     private final EstadoPedidoService estadoPedidoService;
-
-    @Autowired
-    public PedidoController( PedidoService pedidoService,  EstadoPedidoService estadoPedidoService){
-        this.pedidoService = pedidoService;
-        this.estadoPedidoService = estadoPedidoService;
-    }
-
 
     @GetMapping
     public ResponseEntity<List<Pedido>> obtenerTodos(){

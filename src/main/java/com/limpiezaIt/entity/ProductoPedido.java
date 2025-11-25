@@ -19,6 +19,7 @@ public class ProductoPedido {
     private long id;
 
     @Column(nullable = false)
+
     private int cantidad;
 
     @Column

@@ -25,14 +25,8 @@ public class EstadoPedidoController {
 
     //Obtener un estado pedido por id
     @GetMapping("/{id}")
-    public ResponseEntity<EstadoPedido> obtenerEstadoPedidoPorId(Long id) {
-         Optional<EstadoPedido> estadoPedido = estadoPedidoService.verEstadoPedidoPorId(id);
-        if (estadoPedido.isPresent()) {
-            return ResponseEntity.ok(estadoPedido.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+    EstadoPedido obtenerEstadoPedidoPorId(Long id) {
+        return estadoPedidoService.verEstadoPedidoPorId(id);
     }
 
     //Crear un estado pedido

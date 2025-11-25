@@ -14,7 +14,7 @@ public interface ClienteService {
     //Guardar producto.
     Cliente crearCliente(Cliente cliente);
     //Buscar por ID:
-    Optional<Cliente> buscarPorId(Long id);
+    Cliente buscarPorId(Long id);
     //Actualizar:
     Cliente actualizar(Long id, Cliente cliente);
     //Eliminar producto:

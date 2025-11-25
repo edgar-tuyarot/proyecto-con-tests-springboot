@@ -12,7 +12,7 @@ public interface ProductoService {
     //Guardar producto.
     Producto guardarProducto(Producto producto);
     //Buscar por ID:
-    Optional<Producto> buscarPorId(Long id);
+    Producto buscarPorId(Long id);
     //Actualizar:
     Producto actualizar(Long id, Producto producto);
     //Eliminar producto:

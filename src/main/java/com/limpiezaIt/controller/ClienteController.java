@@ -17,6 +17,7 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
 
+    //Obtener todos los clientes
     @GetMapping()
     public ResponseEntity<List<Cliente>> obtenerTodos(){
         List<Cliente> clientes = clienteService.obtenerTodos();
@@ -24,16 +25,13 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    //Buscar cliente por id y estado activo
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> buscarPorId(@PathVariable Long id){
-        Optional<Cliente> cliente = clienteService.buscarPorId(id);
-
-        if (cliente.isPresent()) return ResponseEntity.ok(cliente.get());
-
-        return ResponseEntity.notFound().build();
-
+    Cliente buscarPorId(@PathVariable Long id){
+       return clienteService.buscarPorId(id);
     }
 
+    //Crear cliente
     @PostMapping
     public ResponseEntity<Cliente> crearCliente(@RequestBody Cliente cliente){
         try {
@@ -45,11 +43,10 @@ public class ClienteController {
 
     }
 
+    //Actualizar cliente
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
-            Cliente clienteActualizado = clienteService.actualizar(id,cliente);
-        if(clienteActualizado == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(clienteActualizado);
+    Cliente actualizarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
+            return clienteService.actualizar(id,cliente);
     }
 
     @DeleteMapping("/{id}")

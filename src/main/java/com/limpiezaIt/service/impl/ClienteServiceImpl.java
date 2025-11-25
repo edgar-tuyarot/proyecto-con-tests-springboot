@@ -1,8 +1,10 @@
 package com.limpiezaIt.service.impl;
 
 import com.limpiezaIt.entity.Cliente;
+import com.limpiezaIt.error.ResourceNotFoundException;
 import com.limpiezaIt.repository.ClienteRepository;
 import com.limpiezaIt.service.interfaces.ClienteService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
 
 
     private final ClienteRepository clienteRepository;
 
-    @Autowired
-    public ClienteServiceImpl (ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
-    }
-
-
+    //Buscar todos los clientes
     @Override
     public List<Cliente> obtenerTodos() {
         return clienteRepository.findByActivoTrue();
@@ -31,45 +29,35 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.save(cliente);
     }
 
+    //Buscar por id y activo true
     @Override
-    public Optional<Cliente> buscarPorId(Long id) {
-        Optional<Cliente> optionalCliente = clienteRepository.findByActivoTrueAndId(id);
-        if(optionalCliente.isPresent()) return optionalCliente;
-        return Optional.empty();
+    public Cliente buscarPorId(Long id) throws ResourceNotFoundException {
+        return clienteRepository.findByActivoTrueAndId(id)
+                .orElseThrow(()-> new ResourceNotFoundException("El cliente con el id "+id+" no existe"));
     }
 
     @Override
-    public Cliente actualizar(Long id, Cliente cliente) {
-        //verificamos que el Cliente este en DB y este activo
-        Optional<Cliente> opt = buscarPorId(id);
+    public Cliente actualizar(Long id, Cliente cliente){
+        //verificamos que el Cliente este en DB y este activo si no esta se lanza la excepcion desde el "buscarPorId"
+        Cliente clienteDB = buscarPorId(id);
 
-        //Si esta, se pasa a actualizar
-        if(opt.isPresent()){
-            Cliente clienteDB = opt.get();
-            clienteDB.setNombre(cliente.getNombre());
-            clienteDB.setApellido(cliente.getApellido());
-            clienteDB.setEmail(cliente.getEmail());
-            clienteDB.setTelefono(cliente.getTelefono());
-            clienteDB.setCelular(cliente.getCelular());
-            //Se guarda
-            return clienteRepository.save(clienteDB);
-
-        }else {
-            //Se retorna null si no esta.
-            return null;
-        }
+        //Actualizamos campos.
+        clienteDB.setNombre(cliente.getNombre());
+        clienteDB.setApellido(cliente.getApellido());
+        clienteDB.setEmail(cliente.getEmail());
+        clienteDB.setTelefono(cliente.getTelefono());
+        clienteDB.setCelular(cliente.getCelular());
+        //Se guarda
+        return clienteRepository.save(clienteDB);
 
     }
 
     @Override
     public boolean desactivarCliente(Long id) {
-        Optional<Cliente> opt = buscarPorId(id);
-        if (opt.isPresent()){
-            Cliente cliente = opt.get();
+        Cliente cliente = buscarPorId(id);
             cliente.setActivo(false);
             clienteRepository.save(cliente);
             return true;
-        }
-        return false;
+
     }
 }

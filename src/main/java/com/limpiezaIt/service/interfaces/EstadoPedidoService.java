@@ -12,9 +12,8 @@ public interface EstadoPedidoService {
 
     EstadoPedido guardarEstadoPedido(EstadoPedido estadoPedido);
 
-    Optional<EstadoPedido> actualizarEstadoPedido(Long id, EstadoPedido estadoPedido);
 
-    Optional<EstadoPedido> verEstadoPedidoPorId(Long id);
+    EstadoPedido verEstadoPedidoPorId(Long id);
 
     List<EstadoPedido> verTodosLosEstadosPedidos();
 

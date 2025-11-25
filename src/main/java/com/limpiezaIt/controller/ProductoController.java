@@ -27,12 +27,10 @@ public class ProductoController {
 
     //Obtener producto por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> obtenerPorId(@PathVariable Long id) {
-        Optional<Producto> producto = productoService.buscarPorId(id);
-
-        return producto.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    Producto obtenerPorId(@PathVariable Long id) {
+        return productoService.buscarPorId(id);
     }
+
     //Crear nuevo producto
     @PostMapping
     public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
@@ -46,19 +44,16 @@ public class ProductoController {
 
     //Actualizar producto existente
     @PutMapping("/{id}")
-    public ResponseEntity<Producto> actualizarProducto(
+    Producto actualizarProducto(
             @PathVariable Long id,
             @RequestBody Producto productoActualizado) {
-        Producto producto = productoService.actualizar(id,productoActualizado);
-        return ResponseEntity.ok(producto);
+        return productoService.actualizar(id,productoActualizado);
     }
 
     //Eliminar producto
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarProducto(@PathVariable Long id) {
-
         boolean result = productoService.desactivarProducto(id);
-
         if(result){
             return ResponseEntity.noContent().build();
         }else{

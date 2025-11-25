@@ -14,7 +14,7 @@ public interface CategoriaService {
     //Guardar categoria.
     Categoria guardarCategoria(Categoria categoria);
     //Buscar por ID:
-    Optional<Categoria> buscarPorId(Long id);
+    Categoria buscarPorId(Long id);
     //Actualizar:
     Categoria actualizar(Long id, Categoria categoria);
     //Eliminar categoria:

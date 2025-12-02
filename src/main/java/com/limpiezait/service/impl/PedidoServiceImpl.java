@@ -1,6 +1,7 @@
 package com.limpiezait.service.impl;
 
 import com.limpiezait.dto.PedidoDto;
+import com.limpiezait.dto.ProductoCarritoDto;
 import com.limpiezait.entity.*;
 import com.limpiezait.error.ResourceNotFoundException;
 import com.limpiezait.error.SinStockException;
@@ -92,23 +93,29 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Pedido agregarProductoAlPedido(Long id, Long idProducto) throws SinStockException {
+    public Pedido agregarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido) throws SinStockException {
         //Buscamos el pedido y el prodcuto. Si no se encuentra arroja exception;
-        Producto producto = productoService.buscarPorId(idProducto);
-        Pedido pedido = buscarPorId(id);
+        Producto producto = productoService.buscarPorId(productoCarritoDto.getIdProducto());
+        Pedido pedido = buscarPorId(idPedido);
 
-        if(producto.getStock()<1) {
+        if(producto.getStock()< productoCarritoDto.getCantidad()) {
             throw new SinStockException("No hay stock disponible para el producto "+ producto.getNombre());
         }
-        productoPedidoService.aumentarCantidadProducto(producto, pedido);
+        productoPedidoService.aumentarCantidadProducto(producto, pedido, productoCarritoDto.getCantidad());
 
         //Actualizar stock
-        producto.setStock(producto.getStock()-1);
-        productoService.actualizar(idProducto,producto);
+        producto.setStock(producto.getStock() - productoCarritoDto.getCantidad());
+        productoService.actualizar(producto.getId(),producto);
 
-        //Definimos precio del prodruco pedido
-        BigDecimal precioUnitario = producto.getPrecio();
-        pedido.setTotal(pedido.getTotal().add(precioUnitario));
+
+        //Actualizarmos valor del pedido
+        List<ProductoPedido> productoPedidos = productoPedidoService.obtenerTodosDelPedido(idPedido);
+        pedido.setTotal(BigDecimal.valueOf(0.0));
+        for (ProductoPedido pp : productoPedidos){
+            pedido.setTotal(pedido.getTotal().add(pp.getPrecioUnitario().multiply(BigDecimal.valueOf(pp.getCantidad()))));
+        }
+
+
         return pedidoRepository.save(pedido);
 
     }

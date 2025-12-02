@@ -4,10 +4,17 @@ import com.limpiezait.entity.Pedido;
 import com.limpiezait.entity.Producto;
 import com.limpiezait.entity.ProductoPedido;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public interface ProductoPedidoService {
 
     ProductoPedido buscarPorId(Long id);
 
-    ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido);
+    ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido, int cantidad);
+
+    List<ProductoPedido> obtenerTodosDelPedido(Long idPedido);
+
+
 
 }

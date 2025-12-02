@@ -1,6 +1,7 @@
 package com.limpiezait.service.interfaces;
 
 import com.limpiezait.dto.PedidoDto;
+import com.limpiezait.dto.ProductoCarritoDto;
 import com.limpiezait.entity.Pedido;
 import com.limpiezait.error.ResourceNotFoundException;
 
@@ -24,7 +25,7 @@ public interface PedidoService {
     Pedido actualizarPedido(Long id, Pedido pedido);
 
     //Agregar producto al pedido
-    Pedido agregarProductoAlPedido(Long id, Long idProducto);
+    Pedido agregarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido);
 
     //Eliminar pedido
     void eliminarPedido(Long id);

@@ -31,7 +31,6 @@ public class ProductoPedido {
     //Definimos la relacion muchos a uno con Producto
     @ManyToOne
     @JoinColumn(name = "producto_id")
-    @JsonIgnore
     private Producto producto;
 
     //Definimos la relacion muchos a uno con Pedido

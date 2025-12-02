@@ -8,8 +8,12 @@ import com.limpiezait.error.ResourceNotFoundException;
 import com.limpiezait.repository.ProductoPedidoRepository;
 import com.limpiezait.service.interfaces.ProductoPedidoService;
 import com.limpiezait.service.interfaces.ProductoService;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 
 @Service
@@ -27,22 +31,18 @@ public class ProductoPedidoImpl implements ProductoPedidoService {
     }
 
     @Override
-    public ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido) {
+    public ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido, int cantidad) {
 
         ProductoPedido productoPedido = productoPedidoRepository.findByProductoIdAndPedidoId(producto.getId(), pedido.getId());
+
         if (productoPedido != null) {
-            if (productoPedido.getCantidad() > 0) {
-                productoPedido.setCantidad(productoPedido.getCantidad() + 1);
+                productoPedido.setCantidad(cantidad);
                 productoPedidoRepository.save(productoPedido);
                 return productoPedido;
-            } else {
-                productoPedido.setCantidad(1);
-                productoPedidoRepository.save(productoPedido);
-                return productoPedido;
-            }
+
         }else{
             ProductoPedido nuevoPP = ProductoPedido.builder()
-                    .cantidad(1)
+                    .cantidad(cantidad)
                     .producto(producto)
                     .pedido(pedido)
                     .precioUnitario(producto.getPrecio())
@@ -53,5 +53,12 @@ public class ProductoPedidoImpl implements ProductoPedidoService {
 
     }
 
-    //Viendo los pedidos, retomar en buscar un ProPedido,y si no esta, crearlo si esta el PP con idPEdido y IDprod, sumar 1 en cantidad.
+    @Override
+    public List<ProductoPedido> obtenerTodosDelPedido(Long idPedido) {
+
+       return productoPedidoRepository.findByPedidoId(idPedido);
+
+    }
+
+
 }

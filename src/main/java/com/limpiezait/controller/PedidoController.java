@@ -1,6 +1,7 @@
 package com.limpiezait.controller;
 
 import com.limpiezait.dto.PedidoDto;
+import com.limpiezait.dto.ProductoCarritoDto;
 import com.limpiezait.entity.Pedido;
 import com.limpiezait.error.ResourceNotFoundException;
 import com.limpiezait.service.interfaces.EstadoPedidoService;
@@ -50,10 +51,10 @@ public class PedidoController {
     }
 
     //Agregar Producto al pedido
-    @PutMapping("/{id}/agregar-producto/{idProducto}")
+    @PostMapping("/agregar-producto/{idPedido}")
     @PreAuthorize("hasAnyRole('ADMIN','VENDEDOR')")
-    Pedido agregarProductoAlPedido(@PathVariable Long id, @PathVariable Long idProducto){
-        return pedidoService.agregarProductoAlPedido(id, idProducto);
+    Pedido agregarProductoAlPedido(@PathVariable Long idPedido, @RequestBody ProductoCarritoDto productoCarritoDto){
+        return pedidoService.agregarProductoAlPedido(productoCarritoDto, idPedido);
     }
 
     //Crear Pedido

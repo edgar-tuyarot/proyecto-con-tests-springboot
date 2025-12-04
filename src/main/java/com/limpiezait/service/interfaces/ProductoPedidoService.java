@@ -11,7 +11,7 @@ public interface ProductoPedidoService {
 
     ProductoPedido buscarPorId(Long id);
 
-    ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido, int cantidad);
+    ProductoPedido actualizarCantidadProducto(Producto producto, Pedido pedido, int cantidad);
 
     List<ProductoPedido> obtenerTodosDelPedido(Long idPedido);
 

@@ -31,15 +31,20 @@ public class ProductoPedidoImpl implements ProductoPedidoService {
     }
 
     @Override
-    public ProductoPedido aumentarCantidadProducto(Producto producto, Pedido pedido, int cantidad) {
+    public ProductoPedido actualizarCantidadProducto(Producto producto, Pedido pedido, int cantidad) {
 
         ProductoPedido productoPedido = productoPedidoRepository.findByProductoIdAndPedidoId(producto.getId(), pedido.getId());
 
         if (productoPedido != null) {
-                productoPedido.setCantidad(cantidad);
-                productoPedidoRepository.save(productoPedido);
-                return productoPedido;
-
+            if (productoPedido.getCantidad() < cantidad){
+                producto.setStock(producto.getStock()-cantidad);
+            }else{
+                producto.setStock(producto.getStock()+(productoPedido.getCantidad() - cantidad));
+            }
+            productoPedido.setCantidad(cantidad);
+            productoPedidoRepository.save(productoPedido);
+            productoService.guardarProducto(producto);
+            return productoPedido;
         }else{
             ProductoPedido nuevoPP = ProductoPedido.builder()
                     .cantidad(cantidad)
@@ -48,10 +53,16 @@ public class ProductoPedidoImpl implements ProductoPedidoService {
                     .precioUnitario(producto.getPrecio())
                     .build();
             productoPedidoRepository.save(nuevoPP);
+            producto.setStock(producto.getStock()-cantidad);
+            productoService.guardarProducto(producto);
             return nuevoPP;
         }
 
+
+
     }
+
+
 
     @Override
     public List<ProductoPedido> obtenerTodosDelPedido(Long idPedido) {

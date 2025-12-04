@@ -54,7 +54,7 @@ public class PedidoController {
     @PostMapping("/agregar-producto/{idPedido}")
     @PreAuthorize("hasAnyRole('ADMIN','VENDEDOR')")
     Pedido agregarProductoAlPedido(@PathVariable Long idPedido, @RequestBody ProductoCarritoDto productoCarritoDto){
-        return pedidoService.agregarProductoAlPedido(productoCarritoDto, idPedido);
+        return pedidoService.actualizarProductoAlPedido(productoCarritoDto, idPedido);
     }
 
     //Crear Pedido

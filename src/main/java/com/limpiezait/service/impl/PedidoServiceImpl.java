@@ -93,7 +93,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Pedido agregarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido) throws SinStockException {
+    public Pedido actualizarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido) throws SinStockException {
         //Buscamos el pedido y el prodcuto. Si no se encuentra arroja exception;
         Producto producto = productoService.buscarPorId(productoCarritoDto.getIdProducto());
         Pedido pedido = buscarPorId(idPedido);
@@ -101,24 +101,26 @@ public class PedidoServiceImpl implements PedidoService {
         if(producto.getStock()< productoCarritoDto.getCantidad()) {
             throw new SinStockException("No hay stock disponible para el producto "+ producto.getNombre());
         }
-        productoPedidoService.aumentarCantidadProducto(producto, pedido, productoCarritoDto.getCantidad());
 
-        //Actualizar stock
-        producto.setStock(producto.getStock() - productoCarritoDto.getCantidad());
-        productoService.actualizar(producto.getId(),producto);
+
+        productoPedidoService.actualizarCantidadProducto(producto, pedido, productoCarritoDto.getCantidad());
+
 
 
         //Actualizarmos valor del pedido
+        //Obtenemos los productos del pedido en forma de lista
         List<ProductoPedido> productoPedidos = productoPedidoService.obtenerTodosDelPedido(idPedido);
-        pedido.setTotal(BigDecimal.valueOf(0.0));
+        pedido.setTotal(BigDecimal.valueOf(0.0)); //Seteamos el total en 0
+        //Recorremos la lista y vamos sumando los precios de cada producto
         for (ProductoPedido pp : productoPedidos){
             pedido.setTotal(pedido.getTotal().add(pp.getPrecioUnitario().multiply(BigDecimal.valueOf(pp.getCantidad()))));
         }
 
-
+        //devolvemos el pedido
         return pedidoRepository.save(pedido);
 
     }
+
 
     @Override
     public void eliminarPedido(Long id){

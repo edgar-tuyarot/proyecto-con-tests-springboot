@@ -24,8 +24,10 @@ public interface PedidoService {
     //Actualizar pedido
     Pedido actualizarPedido(Long id, Pedido pedido);
 
-    //Agregar producto al pedido
-    Pedido agregarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido);
+
+
+    //Actualizar producto al pedido
+    Pedido actualizarProductoAlPedido(ProductoCarritoDto productoCarritoDto, Long idPedido);
 
     //Eliminar pedido
     void eliminarPedido(Long id);

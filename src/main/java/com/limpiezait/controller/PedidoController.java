@@ -8,7 +8,6 @@ import com.limpiezait.service.interfaces.EstadoPedidoService;
 import com.limpiezait.service.interfaces.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +50,7 @@ public class PedidoController {
     }
 
     //Agregar Producto al pedido
-    @PostMapping("/agregar-producto/{idPedido}")
+    @PutMapping("/agregar-producto/{idPedido}")
     @PreAuthorize("hasAnyRole('ADMIN','VENDEDOR')")
     Pedido agregarProductoAlPedido(@PathVariable Long idPedido, @RequestBody ProductoCarritoDto productoCarritoDto){
         return pedidoService.actualizarProductoAlPedido(productoCarritoDto, idPedido);
